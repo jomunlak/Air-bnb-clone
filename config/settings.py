@@ -45,6 +45,7 @@ PROJECT_APPS = [
     "reviews",
     "reservations",
     "lists",
+    "conversations",
 ]
 THIRD_PARTY_APPS = ["django_countries"]
 
