@@ -38,8 +38,15 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-PROJECT_APPS = ["users.apps.UsersConfig"]
-THIRD_PARTY_APPS = []
+PROJECT_APPS = [
+    "core",
+    "users",
+    "rooms",
+    "reviews",
+    "reservations",
+    "lists",
+]
+THIRD_PARTY_APPS = ["django_countries"]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 
