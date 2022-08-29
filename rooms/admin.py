@@ -34,6 +34,7 @@ class CustomRoomAdmin(admin.ModelAdmin):
                     "country",
                     "address",
                     "price",
+                    "city",
                 ),
             },
         ),
