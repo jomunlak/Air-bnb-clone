@@ -1,11 +1,12 @@
 import random
+from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from django_seed import Seed
 from users import models as user_models
 from rooms import models as room_models
-from lists import models as list_models
+from reservations import models as reservation_models
 
-NAME = "lists"
+NAME = "reservations"
 
 
 class Command(BaseCommand):
@@ -19,21 +20,17 @@ class Command(BaseCommand):
         rooms = room_models.Room.objects.all()
 
         seeder.add_entity(
-            list_models.List,
+            reservation_models.Reservation,
             number,
             {
-                "user": lambda x: random.choice(users),
+                "guest": lambda x: random.choice(users),
+                "room": lambda x: random.choice(rooms),
+                "check_in": lambda x: datetime.now(),
+                "check_out": lambda x: datetime.now()
+                + timedelta(days=random.randint(3, 100)),
             },
         )
-        created = seeder.execute()
-        cleaned = created[list_models.List]
-
-        for id in cleaned:
-            list_obj = list_models.List.objects.get(id=id)
-            mid = len(rooms) // 2
-            to_all = rooms[random.randint(0, mid) : random.randint(mid + 1, len(rooms))]
-            list_obj.rooms.add(*to_all)
-
+        seeder.execute()
         self.stdout.write(self.style.SUCCESS(f"{number} {NAME} created"))
 
     def add_arguments(self, parser):
