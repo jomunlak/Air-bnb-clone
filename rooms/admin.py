@@ -99,6 +99,8 @@ class CustomRoomAdmin(admin.ModelAdmin):
         "count_amenities",
         "count_photos",
         "total_rating",
+        "created",
+        "updated",
     )
     list_filter = (
         "instant_book",
@@ -116,7 +118,7 @@ class CustomRoomAdmin(admin.ModelAdmin):
         "facilities",
         "house_rules",
     )
-    ordering = ("name", "price")
+    ordering = ("created",)
 
     raw_id_fields = ("host",)
 
