@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import mark_safe
 from . import models
+from rooms import models as room_models
 
 
 @admin.register(
@@ -19,10 +20,18 @@ class ItemAdmin(admin.ModelAdmin):
         return obj.rooms.count()
 
 
+class PhotoInline(admin.StackedInline):
+    model = room_models.Photo
+
+
 @admin.register(models.Room)
 class CustomRoomAdmin(admin.ModelAdmin):
 
     """Custom Room Admin"""
+
+    inlines = [
+        PhotoInline,
+    ]
 
     fieldsets = (
         (
@@ -109,13 +118,16 @@ class CustomRoomAdmin(admin.ModelAdmin):
     )
     ordering = ("name", "price")
 
+    raw_id_fields = ("host",)
+
     def count_amenities(self, obj):
         return obj.amenities.count()
 
     def count_photos(self, obj):
         return obj.photos.count()
 
-    # count_amenities.short_description = "Hello!"
+    count_amenities.short_description = "Amenities"
+    count_photos.short_description = "Photos"
 
 
 @admin.register(models.Photo)
