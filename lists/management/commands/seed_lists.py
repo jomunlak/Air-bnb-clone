@@ -1,14 +1,17 @@
 import random
+from secrets import choice
 from django.core.management.base import BaseCommand
 from django_seed import Seed
-from reviews import models as review_models
 from users import models as user_models
 from rooms import models as room_models
+from lists import models as list_models
+
+NAME = "lists"
 
 
 class Command(BaseCommand):
 
-    help = "This command creates reviews"
+    help = f"This command creates {NAME}"
 
     def handle(self, *args, **options):
         number = options.get("numbers", 1)
@@ -17,28 +20,27 @@ class Command(BaseCommand):
         rooms = room_models.Room.objects.all()
 
         seeder.add_entity(
-            review_models.Review,
+            list_models.List,
             number,
             {
-                "accuracy": lambda x: random.randint(1, 6),
-                "communication": lambda x: random.randint(1, 6),
-                "cleanliness": lambda x: random.randint(1, 6),
-                "location": lambda x: random.randint(1, 6),
-                "check_in": lambda x: random.randint(1, 6),
-                "value": lambda x: random.randint(1, 6),
                 "user": lambda x: random.choice(users),
-                "room": lambda x: random.choice(rooms),
             },
         )
+        created = seeder.execute()
+        cleaned = created[list_models.List]
 
-        seeder.execute()
+        for id in cleaned:
+            list_obj = list_models.List.objects.get(id=id)
+            mid = len(rooms) // 2
+            to_all = rooms[random.randint(0, mid) : random.randint(mid + 1, len(rooms))]
+            list_obj.rooms.add(*to_all)
 
-        self.stdout.write(self.style.SUCCESS(f"{number} reviews created"))
+        self.stdout.write(self.style.SUCCESS(f"{number} {NAME} created"))
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--numbers",
             type=int,
             default=1,
-            help="How many users do you want to create",
+            help=f"How many {NAME} do you want to create",
         )
