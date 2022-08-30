@@ -19,7 +19,7 @@ class Review(core_models.TimeStampedModel):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="reviews")
 
     def __str__(self):
-        return f"{self.content} - {self.room}"
+        return f"{self.user}'s review on {self.room}"
 
     def rating_average(self):
         avg = (
