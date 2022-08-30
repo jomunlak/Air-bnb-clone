@@ -119,4 +119,11 @@ class CustomRoomAdmin(admin.ModelAdmin):
 
 @admin.register(models.Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    pass
+
+    list_display = [
+        "__str__",
+        "get_thumbnail",
+    ]
+
+    def get_thumbnail(self, obj):
+        print(obj.file)

@@ -1,8 +1,9 @@
 from django.db import models
 from django_countries.fields import CountryField
 from core import models as core_models
-import reviews
 from users import models as user_models
+
+# import reviews
 
 
 class AbstractItem(core_models.TimeStampedModel):
