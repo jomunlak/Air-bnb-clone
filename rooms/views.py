@@ -1,11 +1,20 @@
-from datetime import datetime
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.views.generic import ListView
+from django.utils import timezone
 from . import models as room_models
 
 # Create your views here.
 
 
-def all_rooms(request):
-    all_rooms = room_models.Room.objects.all()
-    return render(request, "rooms/all_rooms.html", context={"rooms": all_rooms})
+class HomeView(ListView):
+
+    """HomeView Definition"""
+
+    model = room_models.Room
+    paginate_by = 10
+    paginate_orphans = 5
+    page_kwarg = "page"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = timezone.now()
+        return context
