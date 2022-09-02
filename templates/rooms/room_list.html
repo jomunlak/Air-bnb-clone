@@ -13,7 +13,11 @@
 
 
     {% for room in object_list %}
-        <h2>{{room.name}} / ${{room.price}}</h2>
+        <h2>
+            <a href="{% url "rooms:detail" room.pk %}">
+                {{room.name}} / ${{room.price}}
+            </a>
+        </h2>
     {% endfor %}
 
     <h5>
