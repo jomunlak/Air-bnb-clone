@@ -82,6 +82,9 @@ class Room(core_models.TimeStampedModel):
     facilities = models.ManyToManyField(Facility, blank=True, related_name="rooms")
     house_rules = models.ManyToManyField(HouseRule, blank=True, related_name="rooms")
 
+    def get_absolute_url(self):
+        return reverse("rooms/room_detail.html", kwargs={"pk": self.pk})
+
     def __str__(self):
         return self.name
 

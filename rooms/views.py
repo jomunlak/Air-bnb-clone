@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView
 from django.utils import timezone
 from django.http import Http404
 from . import models as room_models
@@ -28,3 +28,43 @@ class RoomDetail(DetailView):
     """Room Detail Definition"""
 
     model = room_models.Room
+
+
+class EditRoomView(UpdateView):
+
+    """Room Edit View Definition"""
+
+    template_name = "rooms/room_edit.html"
+    model = room_models.Room
+    fields = (
+        "name",
+        "description",
+        "country",
+        "city",
+        "price",
+        "address",
+        "max_guests",
+        "beds",
+        "bedrooms",
+        "baths",
+        "check_in",
+        "check_out",
+        "instant_book",
+        "host",
+        "room_type",
+        "amenities",
+        "facilities",
+        "house_rules",
+    )
+
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset)
+        # if room.host.pk != self.request.user.pk:
+        #     raise Http404
+
+        return room
+
+
+class Photos(DetailView):
+    model = room_models.Room
+    template_name = "rooms/room_photos.html"

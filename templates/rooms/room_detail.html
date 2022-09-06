@@ -7,29 +7,40 @@
 
 
 {% block content %}
-    
+
 <div>
     <h1>{{room.name}}</h1>
     <h3>{{room.description}}</h3>
-    <h4>  By {{room.host.username}} 
+    <h4> By {{room.host.username}}
         {% if room.host.superhost %}(superhost){% endif %}
     </h4>
 </div>
 <div>
+    <h2><a href="{% url 'rooms:edit' room.pk %}">Edit Room</a></h2>
+    <h5><a href="{% url 'rooms:photos' room.pk %}">Edit Photos</a></h5>
+    <h3>Room Type</h3>
+    <ul>
+        <li>{{room.room_type}}</li>
+    </ul>
     <h3>Amenities</h3>
     <ul>
-        {% for a in room.amenities.all  %}
-            <li>{{a}}</li>
+        {% for a in room.amenities.all %}
+        <li>{{a}}</li>
         {% endfor %}
     </ul>
     <h3>Facilities</h3>
     <ul>
-        {% for f in room.facilities.all  %}
-            <li>{{f}}</li>
+        {% for f in room.facilities.all %}
+        <li>{{f}}</li>
+        {% endfor %}
+    </ul>
+    <h3>House Rules</h3>
+    <ul>
+        {% for f in room.house_rules.all %}
+        <li>{{f}}</li>
         {% endfor %}
     </ul>
 </div>
 
 
 {% endblock content %}
-

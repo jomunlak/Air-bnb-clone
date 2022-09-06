@@ -1,0 +1,10 @@
+{% for photo in room.photos.all %}
+
+
+<div>
+    <img src="{{photo.file.url}}" width="50" height="50">
+    <span>{{photo.caption}}</span>
+    <button>Edit Photo</button>
+    <button>Delete Photo</button>
+</div>
+{% endfor %}
