@@ -18,3 +18,28 @@ class LoginForm(forms.Form):
                 self.add_error("password", forms.ValidationError("Passsword is wrong"))
         except models.User.DoesNotExist:
             self.add_error("email", forms.ValidationError("User does not exist"))
+
+
+class SignupForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = ["first_name", "last_name", "email"]
+
+    password = forms.CharField(widget=forms.PasswordInput)
+    password1 = forms.CharField(widget=forms.PasswordInput, label="Comfirm Password")
+
+    def clean_password1(self):
+        password = self.cleaned_data.get("password")
+        password1 = self.cleaned_data.get("password1")
+
+        if password != password1:
+            raise forms.ValidationError("Password does not match")
+        else:
+            return password1
+
+    def save(self):
+        user = super().save(commit=False)
+        user.username = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+        user.set_password(password)
+        user.save()

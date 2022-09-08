@@ -1,4 +1,5 @@
 from audioop import reverse
+from re import L
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -43,3 +44,24 @@ class LoginView(FormView):
 def LogoutView(request):
     logout(request)
     return redirect(reverse("core:home"))
+
+
+class SignupView(FormView):
+    template_name = "users/signup.html"
+    form_class = forms.SignupForm
+    success_url = reverse_lazy("core:home")
+
+    initial = {
+        "first_name": "Jo",
+        "last_name": "munlak",
+        "email": "example@example.com",
+    }
+
+    def form_valid(self, form):
+        form.save()
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=email, password=password)
+        if user is not None:
+            login(self.request, user)
+        return super().form_valid(form)
