@@ -1,11 +1,11 @@
-from audioop import reverse
-from re import L
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView, UpdateView
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView
 from . import forms
+from . import models
 
 # Create your views here.
 # render the html
@@ -65,3 +65,44 @@ class SignupView(FormView):
         if user is not None:
             login(self.request, user)
         return super().form_valid(form)
+
+
+class UserProfileView(DetailView):
+    model = models.User
+    context_object_name = "user_obj"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.pk == context["user_obj"].pk:
+            context["is_myself"] = True
+        else:
+            context["is_myself"] = False
+        return context
+
+
+class UpdateUserView(UpdateView):
+    model = models.User
+    fields = [
+        "bio",
+        "avatar",
+        "gender",
+        "birthdate",
+        "language",
+        "currency",
+        "first_name",
+        "last_name",
+    ]
+    template_name = "users/update_profile.html"
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        self.object.username = email
+        self.object.save()
+        return super().form_valid(form)
+
+
+class UpdatePasswordView(PasswordChangeView):
+    template_name = "users/update_password.html"
