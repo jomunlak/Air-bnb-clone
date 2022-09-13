@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "!jl6&v$z&g%yj05gt8)b#toq1bk4p39ee$&y-hy4vab=waa+_i"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # False
+DEBUG = True  # False
 
-ALLOWED_HOSTS = [] # "*"
+ALLOWED_HOSTS = []  # "*"
 
 
 # Application definition
@@ -133,6 +133,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 AUTH_USER_MODEL = "users.User"
 
